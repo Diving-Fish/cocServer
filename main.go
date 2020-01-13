@@ -36,5 +36,5 @@ func main() {
 		_ = playerData.Find(bson.M{"name": name}).One(&data)
 		ctx.JSON(data)
 	})
-	server.Run(iris.Addr(":8080"))
+	server.Run(iris.Addr(":25565"))
 }
