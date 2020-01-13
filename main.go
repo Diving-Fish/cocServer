@@ -25,6 +25,9 @@ func main() {
 		ctx.Next()
 	}
 	server.Use(crs)
+	server.Options("*", func(ctx iris.Context) {
+		ctx.Next()
+	})
 	server.Post("/insert", func(ctx iris.Context) {
 		data := bson.M{}
 		_ = ctx.ReadJSON(&data)
