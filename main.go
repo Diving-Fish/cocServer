@@ -16,7 +16,7 @@ func main() {
 	playerData := session.DB("coc").C("playerData")
 	server := iris.Default()
 	crs := func(ctx iris.Context) {
-		ctx.Header("Access-Control-Allow-Origin", "https://www.diving-fish.com")
+		ctx.Header("Access-Control-Allow-Origin", "*")
 		ctx.Header("Access-Control-Allow-Credentials", "true")
 		ctx.Header("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Content-Type,Authorization")
 		if ctx.Method() == "OPTIONS" {
