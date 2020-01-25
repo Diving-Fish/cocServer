@@ -21,15 +21,46 @@ class RollExpError(Exception):
         self.msg = msg
 
 
-f = open('help.txt', 'r', encoding='utf-8')
-help_text = f.read()
-f.close()
-f = open('bg.txt', 'r', encoding='utf-8')
-bg_text = f.read()
-f.close()
-f = open('showall.txt', 'r', encoding='utf-8')
-showall_text = f.read()
-f.close()
+help_text = """桜千雪です、よろしく。
+可用命令如下：
+.help 输出此消息
+.bind <角色名称> 绑定角色
+.r/roll <掷骰表达式> 掷骰
+.rc/rollcheck <技能/属性> [值] 技能/属性检定
+.sc/sancheck <成功> <失败> 理智检定
+.stat/st <技能/属性> <add|sub|set> <值> [触发时间（小时）] 增加/减少/设置属性值，可设定触发时间
+.time <pass> [小时] 设置经过时间
+.query/q <玩家名/QQ> <技能/属性> 查询某玩家的某属性
+.intro/.i <玩家名> 查询此角色的基本信息
+.showall/.sa 获取当前玩家的所有信息（将私聊发送）
+.unbind 解绑角色
+车卡网址：https://www.diving-fish.com/coc_card"""
+bg_text = """姓名：%s    玩家：%s
+职业：%s    年龄：%s    性别：%s
+住地：%s    出身：%s
+形象描述：%s
+思想与信念：%s
+重要之人：%s
+意义非凡之地：%s
+宝贵之物：%s
+特质：%s
+伤口和疤痕：%s
+恐惧症和狂躁症：%s
+持有物品：%s"""
+showall_text = """姓名：%s    玩家：%s
+职业：%s    年龄：%s    性别：%s
+住地：%s    出身：%s
+技能/属性信息：
+%s
+形象描述：%s
+思想与信念：%s
+重要之人：%s
+意义非凡之地：%s
+宝贵之物：%s
+特质：%s
+伤口和疤痕：%s
+恐惧症和狂躁症：%s
+持有物品：%s"""
 career_data = demjson.decode_file('career_data.json', encoding='utf-8')
 role_cache = {}
 time_event = []
