@@ -24,6 +24,7 @@ class RollExpError(Exception):
 help_text = """桜千雪です、よろしく。
 可用命令如下：
 .help 输出此消息
+.jrrp 显示今天的人品值
 .bind <角色名称> 绑定角色
 .r/roll <掷骰表达式> 掷骰
 .rc/rollcheck <技能/属性> [值] 技能/属性检定
@@ -67,6 +68,10 @@ time_event = []
 binding_map = {}
 stats_alias_map = {'力量': 'str', '体质': 'con', '体型': 'siz', '敏捷': 'dex', '外貌': 'app', '教育': 'edu', '智力': 'int',
                    '意志': 'pow', '体格': 'tg', '移动': 'mov', '生命': 'hp', '理智': 'san', '魔法': 'mp'}
+
+
+def hash(qq: int):
+    return ((int(time.strftime("%d", time.localtime(time.time()))) * qq) >> 4) % 100
 
 
 def check_map(role):
@@ -242,6 +247,12 @@ async def test(session: CommandSession):
 @on_command('test2')
 async def test2(session: CommandSession):
     await session.send('test ' * 100)
+
+
+@on_command('jrrp')
+async def jrrp(session: CommandSession):
+    qq = int(session.ctx['sender']['user_id'])
+    session.send("今天的人品值为：%d" % hash(qq), at_sender=True)
 
 
 @on_command('help', aliases=['?'], only_to_me=False)
