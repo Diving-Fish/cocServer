@@ -21,7 +21,20 @@ class RollExpError(Exception):
         self.msg = msg
 
 
-help_text = "桜千雪です、よろしく。\n可用命令如下：\n.help 输出此消息\n.bind <角色名称> 绑定角色\n.r/roll <掷骰表达式> 掷骰\n.rc/rollcheck <技能/属性> [值] 技能/属性检定\n.sc/sancheck <成功> <失败> 理智检定\n.stat/st <技能/属性> <add|sub|set> <值> [触发时间（小时）] 增加/减少/设置属性值，可设定触发时间\n.time <pass> [小时] 设置经过时间\n.query/q <玩家名/QQ> <技能/属性> 查询某玩家的某属性\n.intro/.i <玩家名> 查询此角色的基本信息\n.showall/.sa 获取当前玩家的所有信息（将私聊发送）\n.unbind 解绑角色\n车卡网址：https://www.diving-fish.com/coc_card"
+help_text = """桜千雪です、よろしく。
+可用命令如下：
+.help 输出此消息
+.bind <角色名称> 绑定角色
+.r/roll <掷骰表达式> 掷骰
+.rc/rollcheck <技能/属性> [值] 技能/属性检定
+.sc/sancheck <成功> <失败> 理智检定
+.stat/st <技能/属性> <add|sub|set> <值> [触发时间（小时）] 增加/减少/设置属性值，可设定触发时间
+.time <pass> [小时] 设置经过时间
+.query/q <玩家名/QQ> <技能/属性> 查询某玩家的某属性
+.intro/.i <玩家名> 查询此角色的基本信息
+.showall/.sa 获取当前玩家的所有信息（将私聊发送）
+.unbind 解绑角色
+车卡网址：https://www.diving-fish.com/coc_card"""
 bg_text = """姓名：%s    玩家：%s
 职业：%s    年龄：%s    性别：%s
 住地：%s    出身：%s
@@ -219,6 +232,16 @@ def check(nickname, stat_name, value):
             else:
                 text = "失败"
     return "【%s】进行【%s】检定: D100=%d/%d %s" % (nickname, stat_name, rand, value, text)
+
+
+@on_command('test')
+async def test(session: CommandSession):
+    await session.send('test ' * 50)
+
+
+@on_command('test2')
+async def test2(session: CommandSession):
+    await session.send('test ' * 100)
 
 
 @on_command('help', aliases=['?'], only_to_me=False)
