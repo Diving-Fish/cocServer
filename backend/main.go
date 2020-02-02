@@ -14,6 +14,7 @@ func main() {
 	}
 	log.Print("successfully connect to db")
 	playerData := session.DB("coc").C("playerData")
+	pairData := session.DB("coc").C("pairs")
 	server := iris.Default()
 	crs := func(ctx iris.Context) {
 		ctx.Header("Access-Control-Allow-Origin", "*")
@@ -38,6 +39,18 @@ func main() {
 		data := bson.M{}
 		_ = playerData.Find(bson.M{"name": name}).One(&data)
 		ctx.JSON(data)
+	})
+	server.Get("/show_all", func(ctx iris.Context) {
+		pwd := ctx.URLParam("pwd")
+		pwdPair := bson.M{}
+		var players []bson.M
+		_ = pairData.Find(bson.M{"key": "pwd"}).One(&pwdPair)
+		if pwd == pwdPair["value"] {
+			_ = pairData.Find(nil).All(players)
+			ctx.JSON(players)
+		} else {
+			ctx.StatusCode(401)
+		}
 	})
 	server.Run(iris.Addr(":25565"))
 }
