@@ -3,6 +3,7 @@ import requests
 import demjson
 import random
 import math
+import time as _time
 
 
 class Event:
@@ -71,7 +72,7 @@ stats_alias_map = {'力量': 'str', '体质': 'con', '体型': 'siz', '敏捷': 
 
 
 def hash(qq: int):
-    return ((int(time.strftime("%d", time.localtime(time.time()))) * qq) >> 4) % 100
+    return ((int(_time.strftime("%d", _time.localtime(_time.time()))) * qq) >> 4) % 100
 
 
 def check_map(role):
@@ -249,10 +250,10 @@ async def test2(session: CommandSession):
     await session.send('test ' * 100)
 
 
-@on_command('jrrp')
+@on_command('jrrp', only_to_me=False)
 async def jrrp(session: CommandSession):
     qq = int(session.ctx['sender']['user_id'])
-    session.send("今天的人品值为：%d" % hash(qq), at_sender=True)
+    await session.send("【%s】今天的人品值为：%d" % (session.ctx['sender']['nickname'], hash(qq)))
 
 
 @on_command('help', aliases=['?'], only_to_me=False)
@@ -505,7 +506,7 @@ async def bind(session: CommandSession):
         try:
             var = role_cache[name]
         except KeyError:
-            text = requests.get("https://www.diving-fish.com:25565/query", {"name": name}).text
+            text = requests.get("http://api.diving-fish.com:25565/query", {"name": name}).text
             if text == "{}":
                 await session.send("千雪没能找到角色【%s】，下次再出错就把你拉入黑名单了哦！" % name)
                 return
