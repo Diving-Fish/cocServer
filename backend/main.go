@@ -1,13 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/kataras/iris/v12"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
 	"log"
 )
 
 func main() {
+	careers, _ := ioutil.ReadFile("../bot/career_data.json")
+	skills, _ := ioutil.ReadFile("../bot/skill_data.json")
 	session, err := mgo.Dial("mongodb://coc:SakuraYui@localhost:27017/coc")
 	if err != nil {
 		log.Fatal(err)
@@ -51,6 +55,16 @@ func main() {
 		} else {
 			ctx.StatusCode(401)
 		}
+	})
+	server.Get("/skills", func(ctx iris.Context) {
+		ret := bson.M{}
+		json.Unmarshal(skills, &ret)
+		ctx.JSON(ret)
+	})
+	server.Get("/careers", func(ctx iris.Context) {
+		ret := bson.M{}
+		json.Unmarshal(careers, &ret)
+		ctx.JSON(ret)
 	})
 	server.Run(iris.Addr(":25565"))
 }
