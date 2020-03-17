@@ -156,16 +156,16 @@
       <p style="color: #606266">本职技能：{{ career_list[form.career - 1].skills }}</p>
       <p style="color: #606266">CR：{{ career_list[form.career - 1].min_cr }}~{{ career_list[form.career - 1].max_cr }}</p>
       <el-row style="color: #606266; border-bottom: solid #606266 1px; padding: 0px 40px 10px 40px;">
-        <el-col :span="6">
+        <el-col :span="9">
           技能名称
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           初始
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           职业
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           兴趣
         </el-col>
         <el-col :span="6">
@@ -173,38 +173,38 @@
         </el-col>
       </el-row>
       <el-row style="color: #606266; line-height: 30px; padding: 5px 40px 0px 40px;" v-for="skill in skills">
-        <el-col :span="6">
+        <el-col :span="9">
           {{ skill.label == "信用评级" ? "*" : ""}}{{ skill.label }}
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           {{ skill.basic }}
         </el-col>
-        <el-col :span="4">
-          <a v-if="skill.label == '恶名值'">-</a>
-          <el-input v-if="skill.label != '恶名值'" style="width: 80%;" size="small" type="number" v-model="career_points[skill_list.indexOf(skill)]"></el-input>
+        <el-col :span="3">
+          <a v-if="skill.forbid && skill.forbid % 2 == 1">-</a>
+          <el-input v-if="!skill.forbid || skill.forbid % 2 == 0" style="width: 80%;" size="small" type="number" v-model="career_points[skill_list.indexOf(skill)]"></el-input>
         </el-col>
-        <el-col :span="4">
-          <a v-if="skill.label == '恶名值' || skill.label == '信用评级'">-</a>
-          <el-input v-if="skill.label != '信用评级' && skill.label != '恶名值'" style="width: 80%;" size="small" type="number" v-model="interest_points[skill_list.indexOf(skill)]"></el-input>
+        <el-col :span="3">
+          <a v-if="skill.forbid && skill.forbid >= 2">-</a>
+          <el-input v-if="!skill.forbid || skill.forbid < 2" style="width: 80%;" size="small" type="number" v-model="interest_points[skill_list.indexOf(skill)]"></el-input>
         </el-col>
         <el-col :span="6">
           {{ skill.sum }} / {{ Math.floor(skill.sum / 2) }} / {{ Math.floor(skill.sum / 5) }}
         </el-col>
       </el-row>
       <el-row style="color: #606266; line-height: 30px; padding: 5px 40px 0px 40px;">
-        <el-col :span="3">
+        <el-col :span="5">
           *语言(母语):
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <el-input style="width: 80%;" size="small" v-model="form.lang[0].label"></el-input>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           {{ stat[5] }}
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <el-input style="width: 80%;" size="small" type="number" v-model="form.lang[0].career"></el-input>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <el-input style="width: 80%;" size="small" type="number" v-model="form.lang[0].interest"></el-input>
         </el-col>
         <el-col :span="6">
@@ -212,19 +212,19 @@
         </el-col>
       </el-row>
       <el-row style="color: #606266; line-height: 30px; padding: 5px 40px 0px 40px;" v-for="i in [1, 2, 3]">
-        <el-col :span="3">
+        <el-col :span="5">
           语言:
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <el-input style="width: 80%;" size="small" v-model="form.lang[i].label"></el-input>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           1
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <el-input style="width: 80%;" size="small" type="number" v-model="form.lang[i].career"></el-input>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <el-input style="width: 80%;" size="small" type="number" v-model="form.lang[i].interest"></el-input>
         </el-col>
         <el-col :span="6">

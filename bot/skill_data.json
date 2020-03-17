@@ -30,7 +30,7 @@
     {
         "basic": 0,
         "label": "信用评级",
-        "forbid": [2]
+        "forbid": 2
     },
     {
         "basic": 0,
@@ -391,7 +391,7 @@
     {
         "basic": 0,
         "label": "黑暗镜面/恶名值",
-        "forbid": [1, 2]
+        "forbid": 3
     },
     {
         "basic": 5,
