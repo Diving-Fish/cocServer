@@ -6,6 +6,11 @@
   <!-- import CSS -->
   <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">
 </head>
+<style>
+  .important_label .el-form-item__label {
+    color: royalblue;
+  }
+</style>
 <body style="width: 60%; margin: 20px auto; padding: 20px 60px 20px 20px; background: #ffffff;">
   <div id="app">
     <h1>Call of Cthulhu - Card Maker</h1>
@@ -16,6 +21,7 @@
         </el-select>
       </el-form-item>
       <h2>Basics</h2>
+      <p style="color: royalblue; font-size: 14px; margin-left: 0.5em">蓝色标签为必填项</p>
       <el-row>
         <el-col :offset="1" :span="19">
           <el-form-item label-width="auto" label="自定义属性（勾选后可以自行调整属性）">
@@ -54,31 +60,31 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="*姓名">
+          <el-form-item label="姓名" class="important_label">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="*玩家">
+          <el-form-item label="玩家" class="important_label">
             <el-input v-model="form.player_name"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="*职业">
+          <el-form-item label="职业" class="important_label">
             <el-select filterable placeholder="可输入进行搜索" v-model="form.career" style="width: 100%;">
               <el-option v-for="career in career_list" :key="career.id" :value="career.id" :label="career.label"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="*年龄">
+          <el-form-item label="年龄" class="important_label">
             <el-input type="number" v-model="form.age"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="*性别">
+          <el-form-item label="性别" class="important_label">
             <el-select v-model="form.gender">
               <el-option v-for="gender in gender_list" :key="gender.value" :value="gender.value" :label="gender.label"/>
             </el-select>
@@ -87,12 +93,12 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="*住地">
+          <el-form-item label="住地" class="important_label">
             <el-input v-model="form.address"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="*出身">
+          <el-form-item label="出身" class="important_label">
             <el-input v-model="form.from"></el-input>
           </el-form-item>
         </el-col>
@@ -105,29 +111,29 @@
         </el-col>
         <div v-if="form.age >= 40">
           <el-col :span="5">
-            <el-form-item label="*力量">
+            <el-form-item label="力量" class="important_label">
               <el-input v-model="debuff.str"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="*敏捷">
+            <el-form-item label="敏捷" class="important_label">
               <el-input v-model="debuff.dex"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="*体质">
+            <el-form-item label="体质" class="important_label">
               <el-input v-model="debuff.con"></el-input>
             </el-form-item>
           </el-col>
         </div>
         <div v-if="form.age < 20">
           <el-col :span="7" :offset="1">
-            <el-form-item label="*力量">
+            <el-form-item label="力量" class="important_label">
               <el-input v-model="debuff.str"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="*体型">
+            <el-form-item label="体型" class="important_label">
               <el-input v-model="debuff.siz"></el-input>
             </el-form-item>
           </el-col>
@@ -174,7 +180,7 @@
       </el-row>
       <el-row style="color: #606266; line-height: 30px; padding: 5px 40px 0px 40px;" v-for="skill in skills">
         <el-col :span="9">
-          {{ skill.label == "信用评级" ? "*" : ""}}{{ skill.label }}
+          <a :style="skill.important ? 'color: royalblue': ''">{{ skill.label }}</a>
         </el-col>
         <el-col :span="3">
           {{ skill.basic }}
@@ -193,7 +199,7 @@
       </el-row>
       <el-row style="color: #606266; line-height: 30px; padding: 5px 40px 0px 40px;">
         <el-col :span="5">
-          *语言(母语):
+          <a style="color: royalblue">语言(母语):</a>
         </el-col>
         <el-col :span="4">
           <el-input style="width: 80%;" size="small" v-model="form.lang[0].label"></el-input>
@@ -232,22 +238,22 @@
         </el-col>
       </el-row>
       <h2>Background</h2>
-      <el-form-item label="*形象描述">
+      <el-form-item label="形象描述" class="important_label">
         <el-input v-model="form.bg[0]"></el-input>
       </el-form-item>
-      <el-form-item label="*思想与信念">
+      <el-form-item label="思想与信念" class="important_label">
         <el-input v-model="form.bg[1]"></el-input>
       </el-form-item>
-      <el-form-item label="*重要之人">
+      <el-form-item label="重要之人" class="important_label">
         <el-input v-model="form.bg[2]"></el-input>
       </el-form-item>
-      <el-form-item label="*意义非凡之地">
+      <el-form-item label="意义非凡之地" class="important_label">
         <el-input v-model="form.bg[3]"></el-input>
       </el-form-item>
-      <el-form-item label="*宝贵之物">
+      <el-form-item label="宝贵之物" class="important_label">
         <el-input v-model="form.bg[4]"></el-input>
       </el-form-item>
-      <el-form-item label="*特质">
+      <el-form-item label="特质" class="important_label">
         <el-input v-model="form.bg[5]"></el-input>
       </el-form-item>
       <el-form-item label="伤口和疤痕">
