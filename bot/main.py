@@ -1,7 +1,7 @@
 import nonebot
 import config
 from os import path
-from awesome.plugins.plugin import roll_expression
+# from awesome.plugins.plugin import roll_expression
 
 if __name__ == '__main__':
     nonebot.init(config)

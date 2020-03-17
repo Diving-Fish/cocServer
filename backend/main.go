@@ -46,7 +46,7 @@ func main() {
 		var players []bson.M
 		_ = pairData.Find(bson.M{"key": "pwd"}).One(&pwdPair)
 		if pwd == pwdPair["value"] {
-			_ = pairData.Find(nil).All(players)
+			_ = playerData.Find(nil).All(&players)
 			ctx.JSON(players)
 		} else {
 			ctx.StatusCode(401)

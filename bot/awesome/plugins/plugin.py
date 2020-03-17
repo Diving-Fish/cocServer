@@ -4,6 +4,7 @@ import demjson
 import random
 import math
 import time as _time
+# from awesome.plugins.arcaea_crawler import query as arc_query
 
 
 class Event:
@@ -36,6 +37,8 @@ help_text = """桜千雪です、よろしく。
 .intro/.i <玩家名> 查询此角色的基本信息
 .showall/.sa 获取当前玩家的所有信息（将私聊发送）
 .unbind 解绑角色
+.arc <玩家ID> 查询椰叶的成绩
+.ds <曲名/等级> 定数查询
 车卡网址：https://www.diving-fish.com/coc_card"""
 bg_text = """姓名：%s    玩家：%s
 职业：%s    年龄：%s    性别：%s
@@ -68,7 +71,7 @@ role_cache = {}
 time_event = []
 binding_map = {}
 stats_alias_map = {'力量': 'str', '体质': 'con', '体型': 'siz', '敏捷': 'dex', '外貌': 'app', '教育': 'edu', '智力': 'int',
-                   '意志': 'pow', '体格': 'tg', '移动': 'mov', '生命': 'hp', '理智': 'san', '魔法': 'mp'}
+                   '意志': 'pow', '体格': 'tg', '移动': 'mov', '生命': 'hp', '理智': 'san', '魔法': 'mp', '幸运': 'luck', '灵感': 'int'}
 
 
 def hash(qq: int):
@@ -266,6 +269,7 @@ async def unbind(session: CommandSession):
     qq = session.ctx['sender']['user_id']
     try:
         var = binding_map[qq]
+        del role_cache[binding_map[qq]]
         del binding_map[qq]
         await session.send("解绑成功~")
     except KeyError:
@@ -456,7 +460,11 @@ async def _(session: CommandSession):
 @on_command('rollcheck', aliases=['rc'], only_to_me=False)
 async def rollcheck(session: CommandSession):
     qq = session.ctx['sender']['user_id']
-    nickname = binding_map[qq]
+    try:
+    	nickname = binding_map[qq]
+    except KeyError:
+        await session.send("【%s】看起来还没绑定角色呢。输入.bind <角色名称> 进行绑定吧？" % (session.ctx['sender']['nickname']))
+        return
     if session.state['error']:
         await session.send("你这白痴又弄错命令格式了！给我记好了，正确的格式是.rc <技能/属性> [值]！")
         return
@@ -506,7 +514,7 @@ async def bind(session: CommandSession):
         try:
             var = role_cache[name]
         except KeyError:
-            text = requests.get("http://api.diving-fish.com:25565/query", {"name": name}).text
+            text = requests.get("http://47.100.50.175:25565/query", {"name": name}).text
             if text == "{}":
                 await session.send("千雪没能找到角色【%s】，下次再出错就把你拉入黑名单了哦！" % name)
                 return
