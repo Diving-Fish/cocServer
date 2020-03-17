@@ -1,0 +1,394 @@
+[
+    {
+        "basic": 5,
+        "label": "会计"
+    },
+    {
+        "basic": 1,
+        "label": "人类学"
+    },
+    {
+        "basic": 5,
+        "label": "估价"
+    },
+    {
+        "basic": 1,
+        "label": "考古学"
+    },
+    {
+        "basic": 15,
+        "label": "魅惑"
+    },
+    {
+        "basic": 20,
+        "label": "攀爬"
+    },
+    {
+        "basic": 5,
+        "label": "计算机使用"
+    },
+    {
+        "basic": 0,
+        "label": "信用评级"
+    },
+    {
+        "basic": 0,
+        "label": "克苏鲁神话"
+    },
+    {
+        "basic": 5,
+        "label": "乔装"
+    },
+    {
+        "basic": 25,
+        "label": "闪避"
+    },
+    {
+        "basic": 20,
+        "label": "汽车驾驶"
+    },
+    {
+        "basic": 10,
+        "label": "电气维修"
+    },
+    {
+        "basic": 1,
+        "label": "电子学"
+    },
+    {
+        "basic": 5,
+        "label": "话术"
+    },
+    {
+        "basic": 30,
+        "label": "急救"
+    },
+    {
+        "basic": 5,
+        "label": "历史"
+    },
+    {
+        "basic": 15,
+        "label": "恐吓"
+    },
+    {
+        "basic": 20,
+        "label": "跳跃"
+    },
+    {
+        "basic": 5,
+        "label": "法律"
+    },
+    {
+        "basic": 20,
+        "label": "图书馆使用"
+    },
+    {
+        "basic": 20,
+        "label": "聆听"
+    },
+    {
+        "basic": 1,
+        "label": "锁匠"
+    },
+    {
+        "basic": 10,
+        "label": "机械维修"
+    },
+    {
+        "basic": 1,
+        "label": "医学"
+    },
+    {
+        "basic": 10,
+        "label": "博物学"
+    },
+    {
+        "basic": 10,
+        "label": "领航"
+    },
+    {
+        "basic": 5,
+        "label": "神秘学"
+    },
+    {
+        "basic": 1,
+        "label": "操作重型机械"
+    },
+    {
+        "basic": 10,
+        "label": "说服"
+    },
+    {
+        "basic": 1,
+        "label": "精神分析"
+    },
+    {
+        "basic": 10,
+        "label": "心理学"
+    },
+    {
+        "basic": 5,
+        "label": "骑术"
+    },
+    {
+        "basic": 10,
+        "label": "妙手"
+    },
+    {
+        "basic": 25,
+        "label": "侦查"
+    },
+    {
+        "basic": 20,
+        "label": "潜行"
+    },
+    {
+        "basic": 20,
+        "label": "游泳"
+    },
+    {
+        "basic": 20,
+        "label": "投掷"
+    },
+    {
+        "basic": 10,
+        "label": "追踪"
+    },
+    {
+        "basic": 1,
+        "label": "潜水"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 表演"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 美术"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 摄影"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 伪造文书"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 写作"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 书法"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 音乐"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 厨艺"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 表演"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 理发"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 木匠"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 舞蹈"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 莫里斯舞蹈"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 歌剧演唱"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 粉刷/油漆工"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 制陶"
+    },
+    {
+        "basic": 5,
+        "label": "技艺: 雕塑"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 地质学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 化学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 生物学"
+    },
+    {
+        "basic": 10,
+        "label": "科学: 数学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 天文学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 物理学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 药学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 植物学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 动物学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 密码学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 工程学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 气象学"
+    },
+    {
+        "basic": 1,
+        "label": "科学: 司法科学"
+    },
+    {
+        "basic": 5,
+        "label": "格斗: 鞭子"
+    },
+    {
+        "basic": 10,
+        "label": "格斗: 电锯"
+    },
+    {
+        "basic": 25,
+        "label": "格斗: 斗殴"
+    },
+    {
+        "basic": 15,
+        "label": "格斗: 斧"
+    },
+    {
+        "basic": 20,
+        "label": "格斗: 剑"
+    },
+    {
+        "basic": 15,
+        "label": "格斗: 绞索"
+    },
+    {
+        "basic": 10,
+        "label": "格斗: 链枷"
+    },
+    {
+        "basic": 20,
+        "label": "格斗: 矛"
+    },
+    {
+        "basic": 25,
+        "label": "射击: 步枪/霰弹枪"
+    },
+    {
+        "basic": 15,
+        "label": "射击: 冲锋枪"
+    },
+    {
+        "basic": 15,
+        "label": "射击: 弓"
+    },
+    {
+        "basic": 10,
+        "label": "射击: 火焰喷射器"
+    },
+    {
+        "basic": 10,
+        "label": "射击: 机枪"
+    },
+    {
+        "basic": 20,
+        "label": "射击: 手枪"
+    },
+    {
+        "basic": 10,
+        "label": "射击: 重武器"
+    },
+    {
+        "basic": 1,
+        "label": "非常规技能: 爆破"
+    },
+    {
+        "basic": 1,
+        "label": "非常规技能: 催眠"
+    },
+    {
+        "basic": 1,
+        "label": "非常规技能: 读唇"
+    },
+    {
+        "basic": 1,
+        "label": "非常规技能: 炮术"
+    },
+    {
+        "basic": 1,
+        "label": "非常规技能: 潜水"
+    },
+    {
+        "basic": 5,
+        "label": "非常规技能: 驯兽"
+    },
+    {
+        "basic": 1,
+        "label": "驾驶: 飞行器"
+    },
+    {
+        "basic": 1,
+        "label": "驾驶: 船"
+    },
+    {
+        "basic": 5,
+        "label": "同道求援"
+    },
+    {
+        "basic": 1,
+        "label": "梦示"
+    },
+    {
+        "basic": 10,
+        "label": "迷惑"
+    },
+    {
+        "basic": 5,
+        "label": "拷问"
+    },
+    {
+        "basic": 0,
+        "label": "恶名值"
+    }
+]
