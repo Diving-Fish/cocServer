@@ -157,10 +157,12 @@
         <el-table-column prop="san" label="Sanity"></el-table-column>
       </el-table>
       <h2>Skill Points</h2>
-      <p style="color: #606266">剩余职业点数：{{ get_skill_point() - sum(career_points) }}</p>
-      <p style="color: #606266">剩余兴趣点数：{{ stat[6] * 2 - sum(interest_points) }}</p>
-      <p style="color: #606266">本职技能：{{ career_list[form.career - 1].skills }}</p>
-      <p style="color: #606266">CR：{{ career_list[form.career - 1].min_cr }}~{{ career_list[form.career - 1].max_cr }}</p>
+      <div v-if="loaded == true">
+        <p style="color: #606266">剩余职业点数：{{ get_skill_point() - sum(career_points) }}</p>
+        <p style="color: #606266">剩余兴趣点数：{{ stat[6] * 2 - sum(interest_points) }}</p>
+        <p style="color: #606266">本职技能：{{ career_list[form.career - 1].skills }}</p>
+        <p style="color: #606266">CR：{{ career_list[form.career - 1].min_cr }}~{{ career_list[form.career - 1].max_cr }}</p>
+      </div>
       <el-row style="color: #606266; border-bottom: solid #606266 1px; padding: 0px 40px 10px 40px;">
         <el-col :span="9">
           技能名称
@@ -278,10 +280,10 @@
   <p style="color: #666666; font-size: 14px; border-top: solid 1px #666666; padding-top: 20px;">Powered by Diving_Fish. All rights reserved.</p>
 </body>
   <!-- import Vue before Element -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.zhimg.com/vue/dist/vue.min.js"></script>
+  <script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
   <!-- import JavaScript -->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
   <script>
     var v = new Vue({
       el: '#app',
@@ -384,6 +386,7 @@
       },
       data: function() {
         return {
+          loaded: false,
           update: 1,
           career_list: [],
           skill_list: [],
@@ -424,15 +427,17 @@
         }
       },
       created: function() {
+        let that = this;
         axios.get("http://47.100.50.175:25565/careers").then(resp => {
-          this.career_list = resp.data;
-        })
-        axios.get("http://47.100.50.175:25565/skills").then(resp => {
-          this.skill_list = resp.data;
-          for (var i = 0; i < this.skill_list.length; i++) {
-            this.career_points.push(0);
-            this.interest_points.push(0);
-          }
+          that.career_list = resp.data;
+            axios.get("http://47.100.50.175:25565/skills").then(resp => {
+            that.skill_list = resp.data;
+            for (var i = 0; i < that.skill_list.length; i++) {
+              that.career_points.push(0);
+              that.interest_points.push(0);
+            }
+            that.loaded = true;
+          })
         })
         this.roll_stat();
       },
