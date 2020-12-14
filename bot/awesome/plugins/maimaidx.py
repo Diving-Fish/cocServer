@@ -18,20 +18,30 @@ async def spec_random(session: CommandSession):
     regex = "随个(.?)([0-9]+\+?)"
     res = re.match(regex, session.current_arg)
     try:
-        level_index = level_labels.index(res.group()[1])
-        level = level_labels.index(res.group()[2])
         filted = []
-        for music in music_data:
-            if level_index < len(music['level']):
-                if music['level'][level_index] == level:
-                    filted.append(music['level'])
-        music = random_music(filted)
+        level = res.groups()[1]
+        if res.groups()[0] == "":
+            for music in music_data:
+                try:
+                    _ = music['level'].index(level)
+                    filted.append(music)
+                except Exception:
+                    pass
+            music = random_music(filted)
+        else:
+            level_index = level_labels.index(res.groups()[0])
+            for music in music_data:
+                if level_index < len(music['level']):
+                    if music['level'][level_index] == level:
+                        filted.append(music)
+            music = random_music(filted)
         if music['type'] == 'SD':
             t = '[标准]'
         else:
             t = '[DX]'
         await session.send(f"{t}{music['title']} {'/'.join(music['level'])}")
-    except Exception:
+    except Exception as e:
+        print(e)
         await session.send("随机命令错误，请检查语法")
 
 
