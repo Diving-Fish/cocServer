@@ -9,10 +9,10 @@ music_data = json.loads(music_data)
 
 
 def random_music(data) -> dict:
-    return data[random.randrange(0, len(music_data))]
+    return data[random.randrange(0, len(data))]
 
 
-@on_command('spec_rand', patterns="随个.?[0-9]+\+?", only_to_me=False)
+@on_command('spec_rand', patterns="随个[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
 async def spec_random(session: CommandSession):
     level_labels = ['绿', '黄', '红', '紫', '白']
     regex = "随个([绿黄红紫白]?)([0-9]+\+?)"
