@@ -12,6 +12,10 @@ music_data = json.loads(music_data)
 def random_music(data) -> dict:
     return data[random.randrange(0, len(data))]
 
+@on_command("test", only_to_me=False)
+async def aa(session):
+    await session.send('[CQ:image,file=https://www.diving-fish.com/covers/Mare%20Maris.jpg,type=show,id=40000]')
+
 
 async def send_song(session: CommandSession, music: dict):
     if music['type'] == 'SD':
