@@ -17,7 +17,7 @@ async def send_song(session: CommandSession, music: dict):
         t = '[标准]'
     else:
         t = '[DX]'
-    await session.send(f"{t}{music['title']}\n[CQ:image,file=http://baidu.com/1.jpg,type=show,id=40000]\n{'/'.join(music['level'])}")
+    await session.send(f"{t}{music['title']}\n[CQ:image,file=https://www.diving-fish.com/covers/{music['title']}.jpg,type=show,id=40000]\n{'/'.join(music['level'])}")
 
 
 @on_command('spec_rand', patterns="随个[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
