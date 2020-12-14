@@ -34,7 +34,7 @@ async def spec_random(session: CommandSession):
                 if level_index < len(music['level']):
                     if music['level'][level_index] == level:
                         filted.append(music)
-            music = random_music(filted)
+        music = random_music(filted)
         if music['type'] == 'SD':
             t = '[标准]'
         else:
