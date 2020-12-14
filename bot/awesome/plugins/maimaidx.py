@@ -18,4 +18,4 @@ async def natural_random(session: CommandSession):
         t = '[标准]'
     else:
         t = '[DX]'
-    await session.send(f"{t}{music['title']} {'/', music['level']}")
+    await session.send(f"{t}{music['title']} {'/'.join(music['level'])}")
