@@ -1,10 +1,10 @@
 from nonebot import on_command, CommandSession
 import requests
-import demjson
+import json
 import random
 
 music_data = requests.get("https://www.diving-fish.com/api/maimaidxprober/music_data").text
-music_data = demjson.decode(music_data, encoding='utf-8')
+music_data = json.loads(music_data)
 
 
 def random_music() -> dict:
@@ -12,7 +12,7 @@ def random_music() -> dict:
 
 
 @on_command('mr', patterns=".*maimai.*什么", only_to_me=False)
-def natural_random(session: CommandSession):
+async def natural_random(session: CommandSession):
     music = random_music()
     if music['type'] == 'SD':
         t = '[标准]'
