@@ -12,6 +12,14 @@ def random_music(data) -> dict:
     return data[random.randrange(0, len(data))]
 
 
+async def send_song(session: CommandSession, music: dict):
+    if music['type'] == 'SD':
+        t = '[标准]'
+    else:
+        t = '[DX]'
+    await session.send(f"{t}{music['title']}\n[CQ:image,file=http://baidu.com/1.jpg,type=show,id=40000]\n{'/'.join(music['level'])}")
+
+
 @on_command('spec_rand', patterns="随个[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
 async def spec_random(session: CommandSession):
     level_labels = ['绿', '黄', '红', '紫', '白']
@@ -34,11 +42,7 @@ async def spec_random(session: CommandSession):
                     if music['level'][level_index] == level:
                         filted.append(music)
         music = random_music(filted)
-        if music['type'] == 'SD':
-            t = '[标准]'
-        else:
-            t = '[DX]'
-        await session.send(f"{t}{music['title']} {'/'.join(music['level'])}")
+        await send_song(session, music)
     except Exception as e:
         print(e)
         await session.send("随机命令错误，请检查语法")
@@ -47,8 +51,4 @@ async def spec_random(session: CommandSession):
 @on_command('mr', patterns=".*maimai.*什么", only_to_me=False)
 async def natural_random(session: CommandSession):
     music = random_music(music_data)
-    if music['type'] == 'SD':
-        t = '[标准]'
-    else:
-        t = '[DX]'
-    await session.send(f"{t}{music['title']} {'/'.join(music['level'])}")
+    await send_song(session, music)
