@@ -15,7 +15,7 @@ def random_music(data) -> dict:
 @on_command('spec_rand', patterns="随个.?[0-9]+\+?", only_to_me=False)
 async def spec_random(session: CommandSession):
     level_labels = ['绿', '黄', '红', '紫', '白']
-    regex = "随个(.?)([0-9]+\+?)"
+    regex = "随个([绿黄红紫白]?)([0-9]+\+?)"
     res = re.match(regex, session.current_arg)
     try:
         filted = []
@@ -27,7 +27,6 @@ async def spec_random(session: CommandSession):
                     filted.append(music)
                 except Exception:
                     pass
-            music = random_music(filted)
         else:
             level_index = level_labels.index(res.groups()[0])
             for music in music_data:
