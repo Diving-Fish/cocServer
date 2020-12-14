@@ -1,4 +1,4 @@
-from nonebot import on_command, CommandSession
+from nonebot import on_command, CommandSession, argparse
 import requests
 import json
 import random
@@ -11,6 +11,15 @@ music_data = json.loads(music_data)
 
 def random_music(data) -> dict:
     return data[random.randrange(0, len(data))]
+
+
+@on_command('echo', only_to_me=True)
+async def echo(session: CommandSession):
+    await session.send(session.state['arg'])
+
+@echo.args_parser
+async def _(session: CommandSession):
+    session.state['arg'] = session.current_arg_text.strip()
 
 
 async def send_song(session: CommandSession, music: dict):
