@@ -13,15 +13,6 @@ def random_music(data) -> dict:
     return data[random.randrange(0, len(data))]
 
 
-@on_command('echo', only_to_me=True)
-async def echo(session: CommandSession):
-    await session.send(session.state['arg'])
-
-@echo.args_parser
-async def _(session: CommandSession):
-    session.state['arg'] = session.current_arg_text.strip()
-
-
 async def send_song(session: CommandSession, music: dict):
     if music['type'] == 'SD':
         t = '[标准]'
@@ -29,7 +20,26 @@ async def send_song(session: CommandSession, music: dict):
         t = '[DX]'
     file = f"https://www.diving-fish.com/covers/{parse.quote(music['title'])}.jpg"
     print(file)
-    await session.send(f"{t}{music['title']}\n[CQ:image,file={file},type=show,id=40000]\n{'/'.join(music['level'])}")
+    await session.send([
+        {
+            "type": "text",
+            "data": {
+                "text": f"{t}{music['title']}\n"
+            }
+        },
+        {
+            "type": "image",
+            "data": {
+                "file": f"{file}"
+            }
+        },
+        {
+            "type": "text",
+            "data": {
+                "text": f"\n{'/'.join(music['level'])}"
+            }
+        }
+    ])
 
 
 @on_command('spec_rand', patterns="随个[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
