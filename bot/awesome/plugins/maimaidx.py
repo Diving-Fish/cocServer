@@ -74,7 +74,7 @@ async def natural_random(session: CommandSession):
 
 @on_command('search_music', patterns="查歌.+", only_to_me=False)
 async def search_music(session: CommandSession):
-    regex = "查歌.+"
+    regex = "查歌(.+)"
     name = re.match(regex, session.current_arg).groups()[0].strip()
     if name == "":
         return
@@ -92,7 +92,7 @@ async def search_music(session: CommandSession):
             }} for music in res])
 
 
-@on_command('query_song', patterns="[dx|sd][0-9]+", only_to_me=False)
+@on_command('query_song', patterns="^[dx|sd][0-9]+", only_to_me=False)
 async def query_song(session: CommandSession):
     regex = "(?:dx|sd)[0-9]+"
     name = re.match(regex, session.current_arg).group()
@@ -125,7 +125,7 @@ async def query_song(session: CommandSession):
         await session.send("未找到该乐曲")
 
 
-@on_command('query_chart', patterns="[绿黄红紫白][dx|sd][0-9]+", only_to_me=False)
+@on_command('query_chart', patterns="^[绿黄红紫白][dx|sd][0-9]+", only_to_me=False)
 async def query_chart(session: CommandSession):
     regex = "([绿黄红紫白])((?:dx|sd)[0-9]+)"
     groups = re.match(regex, session.current_arg).groups()
