@@ -81,9 +81,9 @@ async def search_music(session: CommandSession):
     res = []
     for music in music_data:
         try:
-            music['title'].index(name)
+            music['title'].lower().index(name.lower())
             res.append(music)
-        except IndexError:
+        except ValueError:
             pass
     await session.send([
         {"type": "text",
@@ -92,40 +92,7 @@ async def search_music(session: CommandSession):
             }} for music in res])
 
 
-@on_command('query_song', patterns="^[dx|sd][0-9]+", only_to_me=False)
-async def query_song(session: CommandSession):
-    regex = "(?:dx|sd)[0-9]+"
-    name = re.match(regex, session.current_arg).group()
-    for music in music_data:
-        if music['id'] == name:
-            break
-    try:
-        file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
-        await session.send([
-            {
-                "type": "text",
-                "data": {
-                    "text": f"{music['id']}. {music['title']}\n"
-                }
-            },
-            {
-                "type": "image",
-                "data": {
-                    "file": f"{file}"
-                }
-            },
-            {
-                "type": "text",
-                "data": {
-                    "text": f"艺术家: {music['basic_info']['artist']}\n分类: {music['basic_info']['genre']}\nBPM: {music['basic_info']['bpm']}\n版本: {music['basic_info']['from']}\n难度: {'/'.join(music['level'])}"
-                }
-            }
-        ])
-    except Exception:
-        await session.send("未找到该乐曲")
-
-
-@on_command('query_chart', patterns="^[绿黄红紫白][dx|sd][0-9]+", only_to_me=False)
+@on_command('query_chart', patterns="[绿黄红紫白][dx|sd][0-9]+", only_to_me=False)
 async def query_chart(session: CommandSession):
     regex = "([绿黄红紫白])((?:dx|sd)[0-9]+)"
     groups = re.match(regex, session.current_arg).groups()
@@ -180,3 +147,36 @@ BREAK: {chart['notes'][4]}
         ])
     except Exception:
         await session.send("未找到该谱面")
+
+
+@on_command('query_song', patterns="[dx|sd][0-9]+", only_to_me=False)
+async def query_song(session: CommandSession):
+    regex = "(?:dx|sd)[0-9]+"
+    name = re.match(regex, session.current_arg).group()
+    for music in music_data:
+        if music['id'] == name:
+            break
+    try:
+        file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
+        await session.send([
+            {
+                "type": "text",
+                "data": {
+                    "text": f"{music['id']}. {music['title']}\n"
+                }
+            },
+            {
+                "type": "image",
+                "data": {
+                    "file": f"{file}"
+                }
+            },
+            {
+                "type": "text",
+                "data": {
+                    "text": f"艺术家: {music['basic_info']['artist']}\n分类: {music['basic_info']['genre']}\nBPM: {music['basic_info']['bpm']}\n版本: {music['basic_info']['from']}\n难度: {'/'.join(music['level'])}"
+                }
+            }
+        ])
+    except Exception:
+        await session.send("未找到该乐曲")
