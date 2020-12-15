@@ -259,7 +259,7 @@ async def jrrp(session: CommandSession):
     await session.send("【%s】今天的人品值为：%d" % (session.ctx['sender']['nickname'], hash(qq)))
 
 
-@on_command('help', aliases=['?'], only_to_me=False)
+@on_command('help', only_to_me=False)
 async def help(session: CommandSession):
     await session.send(help_text)
 
