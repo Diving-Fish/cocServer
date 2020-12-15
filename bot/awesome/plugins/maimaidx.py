@@ -92,32 +92,33 @@ async def search_music(session: CommandSession):
             }} for music in res])
 
 
-@on_command('query_chart', patterns="[绿黄红紫白][dx|sd][0-9]+", only_to_me=False)
+@on_command('query_chart', patterns="[绿黄红紫白]?[dx|sd][0-9]+", only_to_me=False)
 async def query_chart(session: CommandSession):
-    regex = "([绿黄红紫白])((?:dx|sd)[0-9]+)"
+    regex = "([绿黄红紫白]?)((?:dx|sd)[0-9]+)"
     groups = re.match(regex, session.current_arg).groups()
     level_labels = ['绿', '黄', '红', '紫', '白']
-    try:
-        level_index = level_labels.index(groups[0])
-        level_name = ['Basic', 'Advanced', 'Expert', 'Master', 'Re: MASTER']
-        name = groups[1]
-        for music in music_data:
-            if music['id'] == name:
-                break
-        chart = music['charts'][level_index]
-        ds = music['ds'][level_index]
-        level = music['level'][level_index]
-        file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
-        if len(chart['notes']) == 4:
-            msg = f'''{level_name[level_index]} {level}({ds})
+    if groups[0] != "":
+        try:
+            level_index = level_labels.index(groups[0])
+            level_name = ['Basic', 'Advanced', 'Expert', 'Master', 'Re: MASTER']
+            name = groups[1]
+            for music in music_data:
+                if music['id'] == name:
+                    break
+            chart = music['charts'][level_index]
+            ds = music['ds'][level_index]
+            level = music['level'][level_index]
+            file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
+            if len(chart['notes']) == 4:
+                msg = f'''{level_name[level_index]} {level}({ds})
 TAP: {chart['notes'][0]}
 HOLD: {chart['notes'][1]}
 SLIDE: {chart['notes'][2]}
 BREAK: {chart['notes'][3]}
 谱师: {chart['charter']}
 '''
-        else:
-            msg = f'''{level_name[level_index]} {level}({ds})
+            else:
+                msg = f'''{level_name[level_index]} {level}({ds})
 TAP: {chart['notes'][0]}
 HOLD: {chart['notes'][1]}
 SLIDE: {chart['notes'][2]}
@@ -125,58 +126,54 @@ TOUCH: {chart['notes'][3]}
 BREAK: {chart['notes'][4]}
 谱师: {chart['charter']}
 '''
-        await session.send([
-            {
-                "type": "text",
-                "data": {
-                    "text": f"{music['id']}. {music['title']}\n"
+            await session.send([
+                {
+                    "type": "text",
+                    "data": {
+                        "text": f"{music['id']}. {music['title']}\n"
+                    }
+                },
+                {
+                    "type": "image",
+                    "data": {
+                        "file": f"{file}"
+                    }
+                },
+                {
+                    "type": "text",
+                    "data": {
+                        "text": msg
+                    }
                 }
-            },
-            {
-                "type": "image",
-                "data": {
-                    "file": f"{file}"
+            ])
+        except Exception:
+            await session.send("未找到该谱面")
+    else:
+        name = groups[1]
+        for music in music_data:
+            if music['id'] == name:
+                break
+        try:
+            file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
+            await session.send([
+                {
+                    "type": "text",
+                    "data": {
+                        "text": f"{music['id']}. {music['title']}\n"
+                    }
+                },
+                {
+                    "type": "image",
+                    "data": {
+                        "file": f"{file}"
+                    }
+                },
+                {
+                    "type": "text",
+                    "data": {
+                        "text": f"艺术家: {music['basic_info']['artist']}\n分类: {music['basic_info']['genre']}\nBPM: {music['basic_info']['bpm']}\n版本: {music['basic_info']['from']}\n难度: {'/'.join(music['level'])}"
+                    }
                 }
-            },
-            {
-                "type": "text",
-                "data": {
-                    "text": msg
-                }
-            }
-        ])
-    except Exception:
-        await session.send("未找到该谱面")
-
-
-@on_command('query_song', patterns="[dx|sd][0-9]+", only_to_me=False)
-async def query_song(session: CommandSession):
-    regex = "(?:dx|sd)[0-9]+"
-    name = re.match(regex, session.current_arg).group()
-    for music in music_data:
-        if music['id'] == name:
-            break
-    try:
-        file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
-        await session.send([
-            {
-                "type": "text",
-                "data": {
-                    "text": f"{music['id']}. {music['title']}\n"
-                }
-            },
-            {
-                "type": "image",
-                "data": {
-                    "file": f"{file}"
-                }
-            },
-            {
-                "type": "text",
-                "data": {
-                    "text": f"艺术家: {music['basic_info']['artist']}\n分类: {music['basic_info']['genre']}\nBPM: {music['basic_info']['bpm']}\n版本: {music['basic_info']['from']}\n难度: {'/'.join(music['level'])}"
-                }
-            }
-        ])
-    except Exception:
-        await session.send("未找到该乐曲")
+            ])
+        except Exception:
+            await session.send("未找到该乐曲")
