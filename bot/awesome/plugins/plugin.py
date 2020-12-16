@@ -3,8 +3,8 @@ import requests
 import demjson
 import random
 import math
+from awesome.plugins.maimaidx import music_data
 import time as _time
-# from awesome.plugins.arcaea_crawler import query as arc_query
 
 
 class Event:
@@ -21,6 +21,29 @@ class Event:
 class RollExpError(Exception):
     def __init__(self, msg):
         self.msg = msg
+
+
+def song_txt(music, file):
+    return [
+        {
+            "type": "text",
+            "data": {
+                "text": f"{music['id']}. {music['title']}\n"
+            }
+        },
+        {
+            "type": "image",
+            "data": {
+                "file": f"{file}"
+            }
+        },
+        {
+            "type": "text",
+            "data": {
+                "text": f"\n{'/'.join(music['level'])}"
+            }
+        }
+    ]
 
 
 help_text = """桜千雪です、よろしく。
@@ -75,7 +98,8 @@ stats_alias_map = {'力量': 'str', '体质': 'con', '体型': 'siz', '敏捷': 
 
 
 def hash(qq: int):
-    return ((int(_time.strftime("%d", _time.localtime(_time.time()))) * qq) >> 4) % 100
+    days = int(_time.strftime("%d", _time.localtime(_time.time()))) + 31 * int(_time.strftime("%m", _time.localtime(_time.time()))) + 77
+    return days * qq
 
 
 def check_map(role):
@@ -256,7 +280,34 @@ async def test2(session: CommandSession):
 @on_command('jrrp', only_to_me=False)
 async def jrrp(session: CommandSession):
     qq = int(session.ctx['sender']['user_id'])
-    await session.send("【%s】今天的人品值为：%d" % (session.ctx['sender']['nickname'], hash(qq)))
+    h = hash(qq)
+    rp = h % 100
+    await session.send("【%s】今天的人品值为：%d" % (session.ctx['sender']['nickname'], rp))
+
+
+wm_list = ['拼机', '推分', '越级', '下埋', '夜勤', '练底力', '练手法', '打旧框', '干饭', '抓绝赞', '打错位']
+
+
+@on_command('今日舞萌', aliases=['今日mai'], only_to_me=False)
+async def jrwm(session: CommandSession):
+    qq = int(session.ctx['sender']['user_id'])
+    h = hash(qq)
+    rp = h % 100
+    wm_value = []
+    for i in range(11):
+        wm_value.append(h & 3)
+        h >>= 2
+    s = f"今日人品值：{rp}\n"
+    for i in range(11):
+        if wm_value[i] == 3:
+            s += f'宜 {wm_list[i]}\n'
+        elif wm_value[i] == 0:
+            s += f'忌 {wm_list[i]}\n'
+    s += "今日推荐歌曲："
+    music = music_data[h % len(music_data)]
+    await session.send([
+        {"type": "text", "data": {"text": s}}
+    ] + song_txt(music, f"https://www.diving-fish.com/covers/{music['id']}.jpg"))
 
 
 @on_command('help', only_to_me=False)

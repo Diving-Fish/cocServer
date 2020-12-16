@@ -13,10 +13,8 @@ def random_music(data) -> dict:
     return data[random.randrange(0, len(data))]
 
 
-async def send_song(session: CommandSession, music: dict):
-    file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
-    print(file)
-    await session.send([
+def song_txt(music, file):
+    return [
         {
             "type": "text",
             "data": {
@@ -35,7 +33,12 @@ async def send_song(session: CommandSession, music: dict):
                 "text": f"\n{'/'.join(music['level'])}"
             }
         }
-    ])
+    ]
+
+
+async def send_song(session: CommandSession, music: dict):
+    file = f"https://www.diving-fish.com/covers/{music['id']}.jpg"
+    await session.send(song_txt(music, file))
 
 
 @on_command('spec_rand', patterns="随个[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
