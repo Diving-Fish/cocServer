@@ -1,8 +1,11 @@
+from collections import defaultdict
+
 from nonebot import on_command, CommandSession, argparse
 import requests
 import json
 import random
 import re
+from awesome.plugins.plugin import hash
 from urllib import parse
 
 music_data = requests.get("https://www.diving-fish.com/api/maimaidxprober/music_data").text
@@ -41,26 +44,34 @@ async def send_song(session: CommandSession, music: dict):
     await session.send(song_txt(music, file))
 
 
-@on_command('spec_rand', patterns="随个[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
+@on_command('spec_rand', patterns="随个(?:dx|sd|标准)?[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
 async def spec_random(session: CommandSession):
     level_labels = ['绿', '黄', '红', '紫', '白']
-    regex = "随个([绿黄红紫白]?)([0-9]+\+?)"
-    res = re.match(regex, session.current_arg)
+    regex = "随个((?:dx|sd|标准))?([绿黄红紫白]?)([0-9]+\+?)"
+    res = re.match(regex, session.current_arg.lower())
     try:
         filted = []
-        level = res.groups()[1]
-        if res.groups()[0] == "":
+        if res.groups()[0] == "dx":
+            tp = ["DX"]
+        elif res.groups()[0] == "sd" or res.groups()[0] == "标准":
+            tp = ["SD"]
+        else:
+            tp = ["SD", "DX"]
+        level = res.groups()[2]
+        if res.groups()[1] == "":
             for music in music_data:
+                if music['type'] not in tp:
+                    continue
                 try:
                     _ = music['level'].index(level)
                     filted.append(music)
                 except Exception:
                     pass
         else:
-            level_index = level_labels.index(res.groups()[0])
+            level_index = level_labels.index(res.groups()[1])
             for music in music_data:
                 if level_index < len(music['level']):
-                    if music['level'][level_index] == level:
+                    if music['level'][level_index] == level and music['type'] in tp:
                         filted.append(music)
         music = random_music(filted)
         await send_song(session, music)
@@ -88,6 +99,8 @@ async def search_music(session: CommandSession):
             res.append(music)
         except ValueError:
             pass
+    if res == []:
+        await session.send("未找到此乐曲")
     await session.send([
         {"type": "text",
             "data": {
@@ -180,3 +193,57 @@ BREAK: {chart['notes'][4]}
             ])
         except Exception:
             await session.send("未找到该乐曲")
+
+
+wm_list = ['拼机', '推分', '越级', '下埋', '夜勤', '练底力', '练手法', '打旧框', '干饭', '抓绝赞', '收歌']
+
+
+@on_command('今日舞萌', aliases=['今日mai'], only_to_me=False)
+async def jrwm(session: CommandSession):
+    qq = int(session.ctx['sender']['user_id'])
+    h = hash(qq)
+    rp = h % 100
+    wm_value = []
+    for i in range(11):
+        wm_value.append(h & 3)
+        h >>= 2
+    s = f"今日人品值：{rp}\n"
+    for i in range(11):
+        if wm_value[i] == 3:
+            s += f'宜 {wm_list[i]}\n'
+        elif wm_value[i] == 0:
+            s += f'忌 {wm_list[i]}\n'
+    s += "千雪提醒您：打机时不要大力拍打或滑动哦\n今日推荐歌曲："
+    music = music_data[h % len(music_data)]
+    await session.send([
+        {"type": "text", "data": {"text": s}}
+    ] + song_txt(music, f"https://www.diving-fish.com/covers/{music['id']}.jpg"))
+
+
+music_aliases = defaultdict(list)
+f = open('./aliases.csv', 'r', encoding='utf-8')
+tmp = f.readlines()
+f.close()
+for t in tmp:
+    arr = t.strip().split('\t')
+    for i in range(len(arr)):
+        if arr[i] != "":
+            music_aliases[arr[i].lower()].append(arr[0])
+
+
+@on_command('find_song', patterns=".+是什么歌", only_to_me=False)
+async def find_song(session: CommandSession):
+    regex = "(.+)是什么歌"
+    name = re.match(regex, session.current_arg).groups()[0].strip().lower()
+    if name not in music_aliases:
+        await session.send("未找到此歌曲\n舞萌 DX 歌曲别名收集计划：https://docs.qq.com/sheet/DQ0pvUHh6b1hjcGpl")
+        return
+    result_set = music_aliases[name]
+    if len(result_set) == 1:
+        for music in music_data:
+            if music['title'] == result_set[0]:
+                break
+        await session.send([{"type": "text", "data": {"text": "您要找的是不是"}}] + song_txt(music, f"https://www.diving-fish.com/covers/{music['id']}.jpg"))
+    else:
+        s = '\n'.join(result_set)
+        await session.send(f"您要找的可能是以下歌曲中的其中一首：\n{ s }")

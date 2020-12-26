@@ -3,7 +3,6 @@ import requests
 import demjson
 import random
 import math
-from awesome.plugins.maimaidx import music_data
 import time as _time
 
 
@@ -60,9 +59,15 @@ help_text = """桜千雪です、よろしく。
 .intro/.i <玩家名> 查询此角色的基本信息
 .showall/.sa 获取当前玩家的所有信息（将私聊发送）
 .unbind 解绑角色
-.arc <玩家ID> 查询椰叶的成绩
-.ds <曲名/等级> 定数查询
-车卡网址：https://www.diving-fish.com/coc_card"""
+车卡网址：https://www.diving-fish.com/coc_card
+要查看舞萌bot的有关帮助，请输入.help mai"""
+mai_help_text = """桜千雪です、よろしく。
+可用命令如下：
+今日舞萌 查看今天的舞萌运势
+XXXmaimaiXXX什么 随机一首歌
+随个[dx/标准][绿黄红紫白]<难度> 随机一首指定条件的乐曲
+[绿黄红紫白]<歌曲编号> 查询乐曲信息或谱面信息
+<歌曲别名>是什么歌 查询乐曲别名对应的乐曲"""
 bg_text = """姓名：%s    玩家：%s
 职业：%s    年龄：%s    性别：%s
 住地：%s    出身：%s
@@ -98,8 +103,9 @@ stats_alias_map = {'力量': 'str', '体质': 'con', '体型': 'siz', '敏捷': 
 
 
 def hash(qq: int):
-    days = int(_time.strftime("%d", _time.localtime(_time.time()))) + 31 * int(_time.strftime("%m", _time.localtime(_time.time()))) + 77
-    return days * qq
+    days = int(_time.strftime("%d", _time.localtime(_time.time()))) + 31 * int(
+        _time.strftime("%m", _time.localtime(_time.time()))) + 77
+    return (days * qq) >> 8
 
 
 def check_map(role):
@@ -220,7 +226,8 @@ def gen_bg_text(role):
     if role['gender'] == 1:
         gender = "男"
     t = (role['name'], role['player_name'], career, role['age'], gender, role['address'], role['from'],
-        role['bg'][0], role['bg'][1], role['bg'][2], role['bg'][3], role['bg'][4], role['bg'][5], role['bg'][6], role['bg'][7], items)
+         role['bg'][0], role['bg'][1], role['bg'][2], role['bg'][3], role['bg'][4], role['bg'][5], role['bg'][6],
+         role['bg'][7], items)
     return bg_text % t
 
 
@@ -285,34 +292,16 @@ async def jrrp(session: CommandSession):
     await session.send("【%s】今天的人品值为：%d" % (session.ctx['sender']['nickname'], rp))
 
 
-wm_list = ['拼机', '推分', '越级', '下埋', '夜勤', '练底力', '练手法', '打旧框', '干饭', '抓绝赞', '打错位']
-
-
-@on_command('今日舞萌', aliases=['今日mai'], only_to_me=False)
-async def jrwm(session: CommandSession):
-    qq = int(session.ctx['sender']['user_id'])
-    h = hash(qq)
-    rp = h % 100
-    wm_value = []
-    for i in range(11):
-        wm_value.append(h & 3)
-        h >>= 2
-    s = f"今日人品值：{rp}\n"
-    for i in range(11):
-        if wm_value[i] == 3:
-            s += f'宜 {wm_list[i]}\n'
-        elif wm_value[i] == 0:
-            s += f'忌 {wm_list[i]}\n'
-    s += "今日推荐歌曲："
-    music = music_data[h % len(music_data)]
-    await session.send([
-        {"type": "text", "data": {"text": s}}
-    ] + song_txt(music, f"https://www.diving-fish.com/covers/{music['id']}.jpg"))
-
-
 @on_command('help', only_to_me=False)
 async def help(session: CommandSession):
-    await session.send(help_text)
+    v = session.current_arg_text.strip()
+    if v == "":
+        await session.send('''.help coc \t\t查看跑团相关功能
+.help mai \t\t查看舞萌相关功能''')
+    elif v == "mai":
+        await session.send(mai_help_text)
+    elif v == "coc":
+        await session.send(help_text)
 
 
 @on_command('unbind', only_to_me=False)
@@ -333,7 +322,7 @@ async def intro(session: CommandSession):
         await session.send(gen_bg_text(role_cache[session.state['name']]))
     except KeyError:
         await session.send("未找到【%s】！这个角色似乎并没有出现在这个剧本里呢~" % session.state['name'])
-        
+
 
 @intro.args_parser
 async def _(session: CommandSession):
@@ -441,7 +430,7 @@ async def query(session: CommandSession):
         await session.send("未找到能力值【%s】！真的有这个能力吗？" % stat_name)
         return
     await session.send("【%s】的能力值【%s】为：%d/%d/%d" % (role['name'], stat_name, value, int(value / 2), int(value / 5)))
-        
+
 
 @query.args_parser
 async def _(session: CommandSession):
@@ -512,7 +501,7 @@ async def _(session: CommandSession):
 async def rollcheck(session: CommandSession):
     qq = session.ctx['sender']['user_id']
     try:
-    	nickname = binding_map[qq]
+        nickname = binding_map[qq]
     except KeyError:
         await session.send("【%s】看起来还没绑定角色呢。输入.bind <角色名称> 进行绑定吧？" % (session.ctx['sender']['nickname']))
         return
