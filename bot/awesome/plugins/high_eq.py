@@ -1,7 +1,6 @@
 import base64
 from io import BytesIO
 
-import cv2
 from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 from nonebot import CommandSession, on_command
@@ -9,7 +8,6 @@ import re
 
 path = 'high_eq_image.png'
 fontpath = "msyh.ttc"
-src_img = cv2.imread(path)
 
 
 def draw_text(img_pil, text, offset_x):
@@ -43,7 +41,7 @@ def high_eq(session: CommandSession):
     if len(left) > 15 or len(right) > 15:
         session.send("为了图片质量，请不要多于15个字符")
         return
-    img_p = Image.fromarray(src_img)
+    img_p = Image.open('high_eq_image.png')
     draw_text(img_p, left, 0)
     draw_text(img_p, right, 400)
     session.send([{
