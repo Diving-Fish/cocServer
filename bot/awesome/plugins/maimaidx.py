@@ -44,6 +44,38 @@ async def send_song(session: CommandSession, music: dict):
     await session.send(song_txt(music, file))
 
 
+def inner_level_q(ds1, ds2=None):
+    result_set = []
+    diff_label = ['Bas', 'Adv', 'Exp', 'Mst', 'REM']
+    for music in music_data:
+        for i in range(len(music['ds'])):
+            if ds2 is None:
+                if music['ds'][i] == ds1:
+                    result_set.append((music['id'], music['title'], music['ds'][i], diff_label[i], music['level'][i]))
+            elif ds1 <= music['ds'][i] <= ds2:
+                result_set.append((music['id'], music['title'], music['ds'][i], diff_label[i], music['level'][i]))
+    return result_set
+
+
+@on_command('inner_level', aliases=['定数查歌'], only_to_me=False, shell_like=True)
+async def inner_level_query(session: CommandSession):
+    argv = session.args['argv']
+    if len(argv) > 2 or len(argv) == 0:
+        await session.send("命令格式为\n定数查歌 <定数>\n定数查歌 <定数下限> <定数上限>")
+        return
+    if len(argv) == 1:
+        result_set = inner_level_q(float(argv[0]))
+    else:
+        result_set = inner_level_q(float(argv[0]), float(argv[1]))
+    if len(result_set) > 50:
+        await session.send("数据超出 50 条，请尝试缩小查询范围")
+        return
+    s = ""
+    for elem in result_set:
+        s += f"{elem[0]}. {elem[1]} {elem[3]} {elem[4]}({elem[2]})\n"
+    await session.send(s.strip())
+
+
 @on_command('spec_rand', patterns="随个(?:dx|sd|标准)?[绿黄红紫白]?[0-9]+\+?", only_to_me=False)
 async def spec_random(session: CommandSession):
     level_labels = ['绿', '黄', '红', '紫', '白']
