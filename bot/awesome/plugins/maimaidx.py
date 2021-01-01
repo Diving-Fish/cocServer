@@ -5,7 +5,7 @@ import requests
 import json
 import random
 import re
-from awesome.plugins.plugin import hash
+from awesome.plugins.public import hash
 from urllib import parse
 
 music_data = requests.get("https://www.diving-fish.com/api/maimaidxprober/music_data").text
