@@ -2,7 +2,7 @@ import time
 from collections import defaultdict
 
 from aiocqhttp import Event
-from nonebot import on_command, CommandSession, on_notice, get_bot
+from nonebot import on_command, CommandSession, on_notice, get_bot, NoticeSession
 from awesome.plugins.high_eq import *
 
 help_text = """桜千雪です、よろしく。
@@ -59,11 +59,9 @@ async def jrrp(session: CommandSession):
 
 
 @on_notice('notify.poke')
-async def poke(event: Event):
+async def poke(session: NoticeSession):
     bot = get_bot()
+    event = session.event
     if event['target_id'] != event.self_id:
         return
-    if 'group_id' in event:
-        await bot.send_group_msg(group_id=event['group_id'], message='戳你妈')
-    else:
-        await bot.send_private_msg(user_id=event['user_id'], message='戳你妈')
+    await session.send('戳你妈')
